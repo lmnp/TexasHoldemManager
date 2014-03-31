@@ -1,7 +1,7 @@
 #ifndef PREGAMETWODIALOG_H
 #define PREGAMETWODIALOG_H
 
-#include <QMainWindow>
+#include <QDialog>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QBoxLayout>
@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QPushButton>
 
-class PreGameTwoDialog : public QMainWindow
+class PreGameTwoDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -18,6 +18,7 @@ public:
 signals:
 
 public slots:
+    void    on_pb_back_released();
 
 private:
     QGroupBox   *mainGroupBox();

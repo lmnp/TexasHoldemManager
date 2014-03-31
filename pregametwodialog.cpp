@@ -1,15 +1,18 @@
 #include "pregametwodialog.h"
 
 PreGameTwoDialog::PreGameTwoDialog(QWidget *parent) :
-    QMainWindow(parent)
+    QDialog(parent)
 {
-    QVBoxLayout* vbox = new QVBoxLayout(this);
+    QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(mainGroupBox());
     vbox->addWidget(backButton());
     vbox->addWidget(nextButton());
-    QWidget* w = new QWidget(this);
-    w->setLayout(vbox);
-    setCentralWidget(w);
+    setLayout(vbox);
+}
+
+void PreGameTwoDialog::on_pb_back_released()
+{
+    delete this;
 }
 
 QGroupBox* PreGameTwoDialog::mainGroupBox()
@@ -47,6 +50,7 @@ QLineEdit* PreGameTwoDialog::playerAmounts()
 QPushButton* PreGameTwoDialog::backButton()
 {
     QPushButton* pushButton = new QPushButton(tr("Back"), this);
+    connect(pushButton, SIGNAL(released()),this,SLOT(on_pb_back_released()));
     return pushButton;
 }
 
