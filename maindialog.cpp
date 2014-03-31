@@ -12,3 +12,15 @@ MainDialog::~MainDialog()
 {
     delete ui;
 }
+
+void MainDialog::on_pb_settings_released()
+{
+    m_settingsDialog = new SettingsDialog(this);
+    m_settingsDialog->showMaximized();
+}
+
+void MainDialog::on_pb_help_released()
+{
+    m_helpDialog = new HelpDialog(this);
+    m_helpDialog->showMaximized();
+}

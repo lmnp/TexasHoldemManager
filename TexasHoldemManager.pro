@@ -13,11 +13,17 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        maindialog.cpp
+        maindialog.cpp \
+    settingsdialog.cpp \
+    helpdialog.cpp
 
-HEADERS  += maindialog.h
+HEADERS  += maindialog.h \
+    settingsdialog.h \
+    helpdialog.h
 
-FORMS    += maindialog.ui
+FORMS    += maindialog.ui \
+    settingsdialog.ui \
+    helpdialog.ui
 
 CONFIG += mobility
 MOBILITY = 
