@@ -12,3 +12,8 @@ HelpDialog::~HelpDialog()
 {
     delete ui;
 }
+
+void HelpDialog::on_pb_back_released()
+{
+    delete this;
+}

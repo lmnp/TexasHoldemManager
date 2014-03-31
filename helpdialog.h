@@ -15,6 +15,9 @@ public:
     explicit HelpDialog(QWidget *parent = 0);
     ~HelpDialog();
 
+private slots:
+    void on_pb_back_released();
+
 private:
     Ui::HelpDialog *ui;
 };

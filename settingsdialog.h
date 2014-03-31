@@ -15,6 +15,9 @@ public:
     explicit SettingsDialog(QWidget *parent = 0);
     ~SettingsDialog();
 
+private slots:
+    void on_pb_back_released();
+
 private:
     Ui::SettingsDialog *ui;
 };

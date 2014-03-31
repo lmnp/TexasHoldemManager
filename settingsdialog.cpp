@@ -12,3 +12,8 @@ SettingsDialog::~SettingsDialog()
 {
     delete ui;
 }
+
+void SettingsDialog::on_pb_back_released()
+{
+    this->hide();
+}

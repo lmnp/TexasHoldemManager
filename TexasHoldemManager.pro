@@ -15,15 +15,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         maindialog.cpp \
     settingsdialog.cpp \
-    helpdialog.cpp
+    helpdialog.cpp \
+    pregameonedialog.cpp \
+    pregametwodialog.cpp
 
 HEADERS  += maindialog.h \
     settingsdialog.h \
-    helpdialog.h
+    helpdialog.h \
+    pregameonedialog.h \
+    pregametwodialog.h
 
 FORMS    += maindialog.ui \
     settingsdialog.ui \
-    helpdialog.ui
+    helpdialog.ui \
+    pregameonedialog.ui
 
 CONFIG += mobility
 MOBILITY = 

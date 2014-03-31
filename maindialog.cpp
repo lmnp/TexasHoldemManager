@@ -24,3 +24,9 @@ void MainDialog::on_pb_help_released()
     m_helpDialog = new HelpDialog(this);
     m_helpDialog->showMaximized();
 }
+
+void MainDialog::on_pb_play_released()
+{
+    m_pregameonedialog = new PreGameOneDialog(this);
+    m_pregameonedialog->showMaximized();
+}
