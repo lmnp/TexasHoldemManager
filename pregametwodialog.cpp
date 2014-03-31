@@ -10,6 +10,17 @@ PreGameTwoDialog::PreGameTwoDialog(QWidget *parent) :
     setLayout(vbox);
 }
 
+PreGameTwoDialog::PreGameTwoDialog(QWidget *parent, int players, int blinds)
+{
+    m_numberOfPlayers = players;
+    m_sblind          = blinds;
+    QVBoxLayout* vbox = new QVBoxLayout();
+    vbox->addWidget(mainGroupBox());
+    vbox->addWidget(backButton());
+    vbox->addWidget(nextButton());
+    setLayout(vbox);
+}
+
 void PreGameTwoDialog::on_pb_back_released()
 {
     delete this;
@@ -18,7 +29,7 @@ void PreGameTwoDialog::on_pb_back_released()
 QGroupBox* PreGameTwoDialog::mainGroupBox()
 {
     QGridLayout* grid = new QGridLayout(this);
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < m_numberOfPlayers; i++)
     {
         grid->addWidget(playerLabels(), i , 0);
         grid->addWidget(playerNames(), i , 1);
@@ -50,7 +61,7 @@ QLineEdit* PreGameTwoDialog::playerAmounts()
 QPushButton* PreGameTwoDialog::backButton()
 {
     QPushButton* pushButton = new QPushButton(tr("Back"), this);
-    connect(pushButton, SIGNAL(released()),this,SLOT(on_pb_back_released()));
+    connect(pushButton, SIGNAL(released()), this, SLOT(on_pb_back_released()));
     return pushButton;
 }
 
