@@ -8,13 +8,13 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QPushButton>
+#include <QValidator>
 
 class PreGameTwoDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit PreGameTwoDialog(QWidget *parent = 0);
-    PreGameTwoDialog(QWidget *parent = 0, int players = 8, int blinds = 15);
+    explicit PreGameTwoDialog(QWidget *parent = 0, int players = 8, int blinds = 15);
 
 signals:
 
@@ -26,6 +26,7 @@ private:
     QLabel      *playerLabels();
     QLineEdit   *playerNames();
     QLineEdit   *playerAmounts();
+    QLabel      *makeDollars();
     QPushButton *backButton();
     QPushButton *nextButton();
     int          m_numberOfPlayers;

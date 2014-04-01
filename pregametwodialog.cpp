@@ -1,23 +1,16 @@
 #include "pregametwodialog.h"
 
-PreGameTwoDialog::PreGameTwoDialog(QWidget *parent) :
+PreGameTwoDialog::PreGameTwoDialog(QWidget *parent, int players, int blinds) :
     QDialog(parent)
-{
-    QVBoxLayout* vbox = new QVBoxLayout();
-    vbox->addWidget(mainGroupBox());
-    vbox->addWidget(backButton());
-    vbox->addWidget(nextButton());
-    setLayout(vbox);
-}
-
-PreGameTwoDialog::PreGameTwoDialog(QWidget *parent, int players, int blinds)
 {
     m_numberOfPlayers = players;
     m_sblind          = blinds;
     QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(mainGroupBox());
-    vbox->addWidget(backButton());
-    vbox->addWidget(nextButton());
+    QGridLayout* grid = new QGridLayout();
+    grid->addWidget(backButton(), 0, 0);
+    grid->addWidget(nextButton(), 0, 1);
+    vbox->addLayout(grid);
     setLayout(vbox);
 }
 
@@ -31,9 +24,10 @@ QGroupBox* PreGameTwoDialog::mainGroupBox()
     QGridLayout* grid = new QGridLayout(this);
     for(int i = 0; i < m_numberOfPlayers; i++)
     {
-        grid->addWidget(playerLabels(), i , 0);
-        grid->addWidget(playerNames(), i , 1);
-        grid->addWidget(playerAmounts(), i , 2);
+        grid->addWidget(playerLabels(),     i,    0);
+        grid->addWidget(playerNames(),      i,    1);
+        grid->addWidget(makeDollars(),      i,    2);
+        grid->addWidget(playerAmounts(),    i,    3);
     }
     QGroupBox* groupbox = new QGroupBox(tr("Game Configuration Cont."), this);
     groupbox->setLayout(grid);
@@ -54,13 +48,24 @@ QLineEdit* PreGameTwoDialog::playerNames()
 
 QLineEdit* PreGameTwoDialog::playerAmounts()
 {
-    QLineEdit* lineEdit = new QLineEdit(this);
+    QLineEdit*  lineEdit = new QLineEdit(this);
+    QValidator* vdouble  = new QIntValidator(1, 999999999, this);
+    lineEdit->setValidator(vdouble);
+    lineEdit->setMaximumWidth(200);
     return lineEdit;
+}
+
+QLabel*   PreGameTwoDialog::makeDollars()
+{
+    QLabel* label = new QLabel(tr("$"), this);
+    label->setMaximumWidth(50);
+    return label;
 }
 
 QPushButton* PreGameTwoDialog::backButton()
 {
     QPushButton* pushButton = new QPushButton(tr("Back"), this);
+    pushButton->setMinimumSize(150,100);
     connect(pushButton, SIGNAL(released()), this, SLOT(on_pb_back_released()));
     return pushButton;
 }
@@ -68,5 +73,6 @@ QPushButton* PreGameTwoDialog::backButton()
 QPushButton* PreGameTwoDialog::nextButton()
 {
     QPushButton* pushButton = new QPushButton(tr("Next"), this);
+    pushButton->setMinimumSize(150,100);
     return pushButton;
 }
