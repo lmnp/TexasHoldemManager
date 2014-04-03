@@ -29,6 +29,27 @@ private:
     QLabel      *makeDollars();
     QPushButton *backButton();
     QPushButton *nextButton();
+    QLineEdit   *m_player0name;
+    QLineEdit   *m_player1name;
+    QLineEdit   *m_player2name;
+    QLineEdit   *m_player3name;
+    QLineEdit   *m_player4name;
+    QLineEdit   *m_player5name;
+    QLineEdit   *m_player6name;
+    QLineEdit   *m_player7name;
+    QLineEdit   *m_player8name;
+    QLineEdit   *m_player9name;
+
+    QLineEdit   *m_player0amount;
+    QLineEdit   *m_player1amount;
+    QLineEdit   *m_player2amount;
+    QLineEdit   *m_player3amount;
+    QLineEdit   *m_player4amount;
+    QLineEdit   *m_player5amount;
+    QLineEdit   *m_player6amount;
+    QLineEdit   *m_player7amount;
+    QLineEdit   *m_player8amount;
+    QLineEdit   *m_player9amount;
     int          m_numberOfPlayers;
     int          m_sblind;
 

@@ -22,12 +22,97 @@ void PreGameTwoDialog::on_pb_back_released()
 QGroupBox* PreGameTwoDialog::mainGroupBox()
 {
     QGridLayout* grid = new QGridLayout(this);
-    for(int i = 0; i < m_numberOfPlayers; i++)
+    m_player0name   = playerNames();
+    m_player0amount = playerAmounts();
+    m_player1name   = playerNames();
+    m_player1amount = playerAmounts();
+    grid->addWidget(playerLabels(),  0,  0);
+    grid->addWidget(m_player0name,   0,  1);
+    grid->addWidget(makeDollars(),   0,  2);
+    grid->addWidget(m_player0amount, 0,  3);
+
+    grid->addWidget(playerLabels(),  1,  0);
+    grid->addWidget(m_player1name,   1,  1);
+    grid->addWidget(makeDollars(),   1,  2);
+    grid->addWidget(m_player1amount, 1,  3);
+    if(m_numberOfPlayers >= 3)
     {
-        grid->addWidget(playerLabels(),     i,    0);
-        grid->addWidget(playerNames(),      i,    1);
-        grid->addWidget(makeDollars(),      i,    2);
-        grid->addWidget(playerAmounts(),    i,    3);
+        m_player2amount = playerAmounts();
+        m_player2name   = playerNames();
+        grid->addWidget(playerLabels(),  2,  0);
+        grid->addWidget(m_player2name,   2,  1);
+        grid->addWidget(makeDollars(),   2,  2);
+        grid->addWidget(m_player2amount, 2,  3);
+
+        if(m_numberOfPlayers >= 4)
+        {
+            m_player3amount = playerAmounts();
+            m_player3name   = playerNames();
+            grid->addWidget(playerLabels(),  3,  0);
+            grid->addWidget(m_player3name,   3,  1);
+            grid->addWidget(makeDollars(),   3,  2);
+            grid->addWidget(m_player3amount, 3,  3);
+
+            if(m_numberOfPlayers >= 5)
+            {
+                m_player4amount = playerAmounts();
+                m_player4name   = playerNames();
+                grid->addWidget(playerLabels(),  4,  0);
+                grid->addWidget(m_player4name,   4,  1);
+                grid->addWidget(makeDollars(),   4,  2);
+                grid->addWidget(m_player4amount, 4,  3);
+
+                if(m_numberOfPlayers >= 6)
+                {
+                    m_player5amount = playerAmounts();
+                    m_player5name   = playerNames();
+                    grid->addWidget(playerLabels(),  5,  0);
+                    grid->addWidget(m_player5name,   5,  1);
+                    grid->addWidget(makeDollars(),   5,  2);
+                    grid->addWidget(m_player5amount, 5,  3);
+
+                    if(m_numberOfPlayers >= 7)
+                    {
+                        m_player6amount = playerAmounts();
+                        m_player6name   = playerNames();
+                        grid->addWidget(playerLabels(),  6,  0);
+                        grid->addWidget(m_player6name,   6,  1);
+                        grid->addWidget(makeDollars(),   6,  2);
+                        grid->addWidget(m_player6amount, 6,  3);
+
+                        if(m_numberOfPlayers >= 8)
+                        {
+                            m_player7amount = playerAmounts();
+                            m_player7name   = playerNames();
+                            grid->addWidget(playerLabels(),  7,  0);
+                            grid->addWidget(m_player7name,   7,  1);
+                            grid->addWidget(makeDollars(),   7,  2);
+                            grid->addWidget(m_player7amount, 7,  3);
+
+                            if(m_numberOfPlayers >= 9)
+                            {
+                                m_player8amount = playerAmounts();
+                                m_player8name   = playerNames();
+                                grid->addWidget(playerLabels(),  8,  0);
+                                grid->addWidget(m_player8name,   8,  1);
+                                grid->addWidget(makeDollars(),   8,  2);
+                                grid->addWidget(m_player8amount, 8,  3);
+
+                                if(m_numberOfPlayers == 10)
+                                {
+                                    m_player9amount = playerAmounts();
+                                    m_player9name   = playerNames();
+                                    grid->addWidget(playerLabels(),  9,  0);
+                                    grid->addWidget(m_player9name,   9,  1);
+                                    grid->addWidget(makeDollars(),   9,  2);
+                                    grid->addWidget(m_player9amount, 9,  3);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     QGroupBox* groupbox = new QGroupBox(tr("Game Configuration Cont."), this);
     groupbox->setLayout(grid);
