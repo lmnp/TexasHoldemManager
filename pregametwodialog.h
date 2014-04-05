@@ -21,6 +21,8 @@ signals:
 public slots:
     void    on_pb_back_released();
 
+    void    on_pb_next_released();
+
 private:
     QGroupBox   *mainGroupBox();
     QLabel      *playerLabels();
@@ -50,6 +52,7 @@ private:
     QLineEdit   *m_player7amount;
     QLineEdit   *m_player8amount;
     QLineEdit   *m_player9amount;
+
     int          m_numberOfPlayers;
     int          m_sblind;
 

@@ -19,6 +19,10 @@ void PreGameTwoDialog::on_pb_back_released()
     delete this;
 }
 
+void PreGameTwoDialog::on_pb_next_released()
+{
+}
+
 QGroupBox* PreGameTwoDialog::mainGroupBox()
 {
     QGridLayout* grid = new QGridLayout(this);
@@ -128,6 +132,7 @@ QLabel*    PreGameTwoDialog::playerLabels()
 QLineEdit* PreGameTwoDialog::playerNames()
 {
     QLineEdit* lineEdit = new QLineEdit(this);
+    lineEdit->setAlignment(Qt::AlignCenter);
     return lineEdit;
 }
 
@@ -137,6 +142,8 @@ QLineEdit* PreGameTwoDialog::playerAmounts()
     QValidator* vdouble  = new QIntValidator(1, 999999999, this);
     lineEdit->setValidator(vdouble);
     lineEdit->setMaximumWidth(200);
+    lineEdit->setAlignment(Qt::AlignRight);
+    lineEdit->setText("1000");
     return lineEdit;
 }
 
@@ -159,5 +166,6 @@ QPushButton* PreGameTwoDialog::nextButton()
 {
     QPushButton* pushButton = new QPushButton(tr("Next"), this);
     pushButton->setMinimumSize(150,100);
+    connect(pushButton, SIGNAL(released()), this, SLOT(on_pb_next_released()));
     return pushButton;
 }
