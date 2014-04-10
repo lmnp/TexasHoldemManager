@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QValidator>
+#include "mainwindow.h"
 
 class PreGameTwoDialog : public QDialog
 {
@@ -53,6 +54,7 @@ private:
     QLineEdit   *m_player8amount;
     QLineEdit   *m_player9amount;
 
+    MainWindow  *m_mainwindow;
     int          m_numberOfPlayers;
     int          m_sblind;
 

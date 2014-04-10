@@ -17,13 +17,19 @@ SOURCES += main.cpp\
     settingsdialog.cpp \
     helpdialog.cpp \
     pregameonedialog.cpp \
-    pregametwodialog.cpp
+    pregametwodialog.cpp \
+    tablewidget.cpp \
+    mainwindow.cpp \
+    playerwidget.cpp
 
 HEADERS  += maindialog.h \
     settingsdialog.h \
     helpdialog.h \
     pregameonedialog.h \
-    pregametwodialog.h
+    pregametwodialog.h \
+    tablewidget.h \
+    mainwindow.h \
+    playerwidget.h
 
 FORMS    += maindialog.ui \
     settingsdialog.ui \

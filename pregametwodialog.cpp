@@ -21,6 +21,78 @@ void PreGameTwoDialog::on_pb_back_released()
 
 void PreGameTwoDialog::on_pb_next_released()
 {
+    QString names[10];
+    names[0] = m_player0name->text();
+    names[1] = m_player1name->text();
+    if(m_numberOfPlayers >= 3)
+    {
+        names[2] = m_player2name->text();
+        if(m_numberOfPlayers >= 4)
+        {
+            names[3] = m_player3name->text();
+            if(m_numberOfPlayers >= 5)
+            {
+                names[4] = m_player4name->text();
+                if(m_numberOfPlayers >= 6)
+                {
+                    names[5] = m_player5name->text();
+                    if(m_numberOfPlayers >= 7)
+                    {
+                        names[6] = m_player6name->text();
+                        if(m_numberOfPlayers >= 8)
+                        {
+                            names[7] = m_player7name->text();
+                            if(m_numberOfPlayers >= 9)
+                            {
+                                names[8] = m_player8name->text();
+                                if(m_numberOfPlayers == 10)
+                                {
+                                    names[9] = m_player9name->text();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    int amounts[10];
+    amounts[0] = m_player0amount->text().toInt();
+    amounts[1] = m_player1amount->text().toInt();
+    if(m_numberOfPlayers >= 3)
+    {
+        amounts[2] = m_player2amount->text().toInt();
+        if(m_numberOfPlayers >= 4)
+        {
+            amounts[3] = m_player3amount->text().toInt();
+            if(m_numberOfPlayers >= 5)
+            {
+                amounts[4] = m_player4amount->text().toInt();
+                if(m_numberOfPlayers >= 6)
+                {
+                    amounts[5] = m_player5amount->text().toInt();
+                    if(m_numberOfPlayers >= 7)
+                    {
+                        amounts[6] = m_player6amount->text().toInt();
+                        if(m_numberOfPlayers >= 8)
+                        {
+                            amounts[7] = m_player7amount->text().toInt();
+                            if(m_numberOfPlayers >= 9)
+                            {
+                                amounts[8] = m_player8amount->text().toInt();
+                                if(m_numberOfPlayers == 10)
+                                {
+                                    amounts[9] = m_player9amount->text().toInt();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    m_mainwindow = new MainWindow(this,m_sblind, m_numberOfPlayers,names, amounts);
+    m_mainwindow->showMaximized();
 }
 
 QGroupBox* PreGameTwoDialog::mainGroupBox()
