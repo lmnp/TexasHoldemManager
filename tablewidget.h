@@ -31,6 +31,8 @@ private:
     PlayerWidget* m_player7;
     PlayerWidget* m_player8;
     PlayerWidget* m_player9;
+    PlayerWidget* m_currentPlayer;
+    int           m_status[10]; //2-bet placed, 1-yet to go,0-current turn,-1-out(folded),-2-not playing
     QTabWidget  * makeTabWidget();
     QGroupBox   * makeCurrentGroupBox();
     QGroupBox   * makeOtherGroupBox();
