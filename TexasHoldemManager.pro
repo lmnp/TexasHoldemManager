@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     pregametwodialog.cpp \
     tablewidget.cpp \
     mainwindow.cpp \
-    playerwidget.cpp
+    playerwidget.cpp \
+    raisedialog.cpp
 
 HEADERS  += maindialog.h \
     settingsdialog.h \
@@ -29,7 +30,8 @@ HEADERS  += maindialog.h \
     pregametwodialog.h \
     tablewidget.h \
     mainwindow.h \
-    playerwidget.h
+    playerwidget.h \
+    raisedialog.h
 
 FORMS    += maindialog.ui \
     settingsdialog.ui \

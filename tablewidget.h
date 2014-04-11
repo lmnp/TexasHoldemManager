@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include "playerwidget.h"
+#include "raisedialog.h"
 
 class TableWidget : public QWidget
 {
@@ -17,11 +18,14 @@ public:
     explicit TableWidget(QWidget *parent = 0,int blind = 15, int players = 8, QString* names = NULL, int* amounts = NULL);
 
 signals:
+    void        playerChanged(QString x);
 
 public slots:
     void        on_pb_call_released();
     void        on_pb_fold_released();
     void        on_pb_check_released();
+    void        on_pb_raise_released();
+    void        on_raised_confirmed(int x);
 
 private:
     PlayerWidget* m_player0;
@@ -46,6 +50,8 @@ private:
     QLabel      * m_amount9;
 
     PlayerWidget* m_currentPlayer;
+    QLabel      * m_currentPlayerName;
+    QLabel      * m_currentPlayerAmount;
 
 
     QTabWidget  * makeTabWidget();
@@ -64,6 +70,8 @@ private:
     QPushButton * m_pb_8;
     QPushButton * m_pb_9;
 
+    RaiseDialog * m_raise;
+
     int           m_status[10]; //2-bet placed, 1-yet to go,0-current turn,-1-out(folded),-2-not playing
 
 
@@ -72,6 +80,8 @@ private:
     int           m_sblind;
     int           m_bblind;
     int           m_numberOfPlayers;
+    int           m_playersStillIn;
+    int           m_round;
 };
 
 #endif // TABLEWIDGET_H

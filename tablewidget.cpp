@@ -6,7 +6,9 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
     m_sblind                    = blind;
     m_bblind                    = m_sblind*2;
     m_numberOfPlayers           = players;
+    m_playersStillIn            = m_numberOfPlayers;
     m_pot                       = 0;
+    m_currentBet                = 0;
     m_player0                   = new PlayerWidget(this, names[0], amounts[0], true);
     m_player1                   = new PlayerWidget(this, names[1], amounts[1]);
     m_player0->setNextPlayer(m_player1);
@@ -76,40 +78,10 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
 
 void        TableWidget::on_pb_call_released()
 {
-    m_currentPlayer->changeAmount(50);
-    if(m_currentPlayer->getNextPlayer()->getGameStatus())
-        m_currentPlayer = m_currentPlayer->getNextPlayer();
-    else
-    {   PlayerWidget* m_temp = m_currentPlayer->getNextPlayer();
-        while(!m_temp->getGameStatus())
-        {
-            m_temp = m_temp->getNextPlayer();
-        }
-        m_currentPlayer = m_temp;
-    }
-}
-
-void        TableWidget::on_pb_fold_released()
-{
-    m_currentPlayer->setGameStatus(false);
-    if(m_currentPlayer->getNextPlayer()->getGameStatus())
-        m_currentPlayer = m_currentPlayer->getNextPlayer();
-    else
-    {   PlayerWidget* m_temp = m_currentPlayer->getNextPlayer();
-        while(!m_temp->getGameStatus())
-        {
-            m_temp = m_temp->getNextPlayer();
-        }
-        m_currentPlayer = m_temp;
-    }
-}
-
-void        TableWidget::on_pb_check_released()
-{
-    if(m_currentBet == 0)
+    int diff    =   m_currentBet    -   m_currentPlayer->getLastBet();
+    m_currentPlayer->changeAmount(diff);
+    if(m_playersStillIn > 1)
     {
-        m_currentPlayer->changeAmount(0);
-        m_currentBet    =   0;
         if(m_currentPlayer->getNextPlayer()->getGameStatus())
             m_currentPlayer = m_currentPlayer->getNextPlayer();
         else
@@ -120,7 +92,89 @@ void        TableWidget::on_pb_check_released()
                 m_temp = m_temp->getNextPlayer();
             }
             m_currentPlayer = m_temp;
+            emit playerChanged(m_currentPlayer->getName());
         }
+    }
+}
+
+void        TableWidget::on_pb_fold_released()
+{
+    m_currentPlayer->setGameStatus(false);
+    m_playersStillIn--;
+    if(m_playersStillIn > 1)
+    {
+        if(m_currentPlayer->getNextPlayer()->getGameStatus())
+            m_currentPlayer = m_currentPlayer->getNextPlayer();
+        else
+        {
+            PlayerWidget* m_temp = m_currentPlayer->getNextPlayer();
+            while(!m_temp->getGameStatus())
+            {
+                m_temp = m_temp->getNextPlayer();
+            }
+            m_currentPlayer = m_temp;
+            emit playerChanged(m_currentPlayer->getName());
+        }
+    }
+}
+
+void        TableWidget::on_pb_check_released()
+{
+    if(m_currentBet == 0)
+    {
+        m_currentPlayer->changeAmount(0);
+        m_currentBet    =   0;
+        if(m_playersStillIn > 1)
+        {
+            if(m_currentPlayer->getNextPlayer()->getGameStatus())
+                m_currentPlayer = m_currentPlayer->getNextPlayer();
+            else
+            {
+                PlayerWidget* m_temp = m_currentPlayer->getNextPlayer();
+                while(!m_temp->getGameStatus())
+                {
+                    m_temp = m_temp->getNextPlayer();
+                }
+                m_currentPlayer = m_temp;
+                emit playerChanged(m_currentPlayer->getName());
+            }
+        }
+    }
+}
+
+void         TableWidget::on_pb_raise_released()
+{
+    m_raise   =   new RaiseDialog(this, m_currentBet, m_currentPlayer->getAmount(),m_currentPlayer->getLastBet());
+    connect(m_raise,  SIGNAL(bet_confirmed(int)), this, SLOT(on_raised_confirmed(int)));
+    m_raise->setModal(true);
+    m_raise->exec();
+}
+
+void    TableWidget::on_raised_confirmed(int x)
+{
+    if(x != 0)
+    {
+        m_currentPlayer->changeAmount(x);
+        m_currentBet    =   x;
+        if(m_playersStillIn > 1)
+        {
+            if(m_currentPlayer->getNextPlayer()->getGameStatus())
+                m_currentPlayer = m_currentPlayer->getNextPlayer();
+            else
+            {
+                PlayerWidget* m_temp = m_currentPlayer->getNextPlayer();
+                while(!m_temp->getGameStatus())
+                {
+                    m_temp = m_temp->getNextPlayer();
+                }
+                m_currentPlayer = m_temp;
+                emit playerChanged(m_currentPlayer->getName());
+            }
+        }
+    }
+    else
+    {
+            return;
     }
 }
 
@@ -129,6 +183,8 @@ QGroupBox*  TableWidget::makeCurrentGroupBox()
     QGridLayout* grid           =   new QGridLayout(this);
     QLabel*      l_name         =   new QLabel(tr("Name "));
     QLabel*      l_amount       =   new QLabel(tr("Amount "));
+    m_currentPlayerName         =   new QLabel(m_currentPlayer->getName());
+    m_currentPlayerAmount       =   new QLabel(QString::number(m_currentPlayer->getAmount()));
     QGroupBox*   options        =   new QGroupBox(tr("Options"));
     QGridLayout* o_grid         =   new QGridLayout(this);
     QPushButton* pb_raise       =   new QPushButton(tr("Raise"));
@@ -138,14 +194,19 @@ QGroupBox*  TableWidget::makeCurrentGroupBox()
     connect(pb_call,    SIGNAL(released()), this,   SLOT(on_pb_call_released()));
     connect(pb_fold,    SIGNAL(released()), this,   SLOT(on_pb_fold_released()));
     connect(pb_check,   SIGNAL(released()), this,   SLOT(on_pb_check_released()));
+    connect(pb_raise,   SIGNAL(released()), this,   SLOT(on_pb_raise_released()));
+    connect(m_currentPlayer, SIGNAL(amountChanged(int)),        m_currentPlayerAmount,  SLOT(setNum(int)));
+    connect(this,            SIGNAL(playerChanged(QString)),    m_currentPlayerName,    SLOT(setText(QString)));
     grid->addWidget(l_name,0,0);
     grid->addWidget(l_amount,1,0);
+    grid->addWidget(m_currentPlayerName,0,1);
+    grid->addWidget(m_currentPlayerAmount,1,1);
     o_grid->addWidget(pb_raise, 0, 0);
     o_grid->addWidget(pb_fold, 0, 1);
     o_grid->addWidget(pb_call, 1, 0);
     o_grid->addWidget(pb_check, 1, 1);
     options->setLayout(o_grid);
-    grid->addWidget(options, 1, 1);
+    grid->addWidget(options, 0, 2, 1, 2);
     QGroupBox*  groupbox    =    new QGroupBox(this);
     groupbox->setLayout(grid);
     return groupbox;
