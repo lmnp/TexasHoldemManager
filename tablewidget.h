@@ -34,7 +34,6 @@ private:
     PlayerWidget* m_player7;
     PlayerWidget* m_player8;
     PlayerWidget* m_player9;
-    PlayerWidget* m_currentPlayer;
     QLabel      * m_amount0;
     QLabel      * m_amount1;
     QLabel      * m_amount2;
@@ -45,10 +44,29 @@ private:
     QLabel      * m_amount7;
     QLabel      * m_amount8;
     QLabel      * m_amount9;
-    int           m_status[10]; //2-bet placed, 1-yet to go,0-current turn,-1-out(folded),-2-not playing
+
+    PlayerWidget* m_currentPlayer;
+
+
     QTabWidget  * makeTabWidget();
     QGroupBox   * makeCurrentGroupBox();
     QGroupBox   * makeOtherGroupBox();
+
+    QGroupBox   * makePlayerPushButtons();
+    QPushButton * m_pb_0;
+    QPushButton * m_pb_1;
+    QPushButton * m_pb_2;
+    QPushButton * m_pb_3;
+    QPushButton * m_pb_4;
+    QPushButton * m_pb_5;
+    QPushButton * m_pb_6;
+    QPushButton * m_pb_7;
+    QPushButton * m_pb_8;
+    QPushButton * m_pb_9;
+
+    int           m_status[10]; //2-bet placed, 1-yet to go,0-current turn,-1-out(folded),-2-not playing
+
+
     int           m_pot;
     int           m_currentBet;
     int           m_sblind;

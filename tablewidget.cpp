@@ -69,6 +69,7 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
     else
         m_player1->setNextPlayer(m_player0);
     QVBoxLayout* vbox = new QVBoxLayout(this);
+    vbox->addWidget(makePlayerPushButtons());
     vbox->addWidget(makeTabWidget());
     setLayout(vbox);
 }
@@ -105,7 +106,7 @@ void        TableWidget::on_pb_fold_released()
 
 void        TableWidget::on_pb_check_released()
 {
-    if(m_currentBet = 0)
+    if(m_currentBet == 0)
     {
         m_currentPlayer->changeAmount(0);
         m_currentBet    =   0;
@@ -150,7 +151,7 @@ QGroupBox*  TableWidget::makeCurrentGroupBox()
     return groupbox;
 }
 
-QGroupBox* TableWidget::makeOtherGroupBox()
+QGroupBox*  TableWidget::makeOtherGroupBox()
 {
     QGridLayout* grid   =   new QGridLayout(this);
     QLabel* name = new QLabel(m_player0->getName(),this);
@@ -263,6 +264,125 @@ QTabWidget* TableWidget::makeTabWidget()
     maketable->addTab(makeCurrentGroupBox(),tr("Current Player"));
     maketable->addTab(makeOtherGroupBox(), tr("Other"));
     maketable->setMaximumHeight(this->parentWidget()->parentWidget()->height()/3);
-    maketable->setMinimumHeight(this->parentWidget()->parentWidget()->height()/4);
     return maketable;
+}
+
+QGroupBox*  TableWidget::makePlayerPushButtons()
+{
+    QGridLayout*    grid    =   new QGridLayout(this);
+    m_pb_0  =   new QPushButton(m_player0->getName(),this);
+    m_pb_1  =   new QPushButton(m_player1->getName(),this);
+    if(m_numberOfPlayers >= 3)
+    {
+        m_pb_2  =   new QPushButton(m_player2->getName(),this);
+        if(m_numberOfPlayers >= 4)
+        {
+            m_pb_3  =   new QPushButton(m_player3->getName(),this);
+            if(m_numberOfPlayers >= 5)
+            {
+                m_pb_4  =   new QPushButton(m_player4->getName(),this);
+                if(m_numberOfPlayers >= 6)
+                {
+                    m_pb_5  =   new QPushButton(m_player5->getName(),this);
+                    if(m_numberOfPlayers >= 7)
+                    {
+                        m_pb_6  =   new QPushButton(m_player6->getName(),this);
+                        if(m_numberOfPlayers >= 8)
+                        {
+                            m_pb_7  =   new QPushButton(m_player7->getName(),this);
+                            if(m_numberOfPlayers >= 9)
+                            {
+                                m_pb_8  =   new QPushButton(m_player8->getName(),this);
+                                if(m_numberOfPlayers == 10)
+                                {
+                                    m_pb_9  =   new QPushButton(m_player9->getName(),this);
+                                    grid->addWidget(m_pb_0,1,0);
+                                    grid->addWidget(m_pb_1,0,1);
+                                    grid->addWidget(m_pb_2,0,2);
+                                    grid->addWidget(m_pb_3,1,3);
+                                    grid->addWidget(m_pb_4,2,3);
+                                    grid->addWidget(m_pb_5,3,3);
+                                    grid->addWidget(m_pb_6,4,2);
+                                    grid->addWidget(m_pb_7,4,1);
+                                    grid->addWidget(m_pb_8,3,0);
+                                    grid->addWidget(m_pb_9,2,0);
+                                }
+                                else
+                                {
+                                    grid->addWidget(m_pb_0,1,0);
+                                    grid->addWidget(m_pb_1,0,1);
+                                    grid->addWidget(m_pb_2,0,2);
+                                    grid->addWidget(m_pb_3,1,3);
+                                    grid->addWidget(m_pb_4,2,3);
+                                    grid->addWidget(m_pb_5,3,3);
+                                    grid->addWidget(m_pb_6,4,2);
+                                    grid->addWidget(m_pb_7,4,1);
+                                    grid->addWidget(m_pb_8,3,0);
+                                }
+                            }
+                            else
+                            {
+                                grid->addWidget(m_pb_0,1,0);
+                                grid->addWidget(m_pb_1,0,2);
+                                grid->addWidget(m_pb_2,1,4);
+                                grid->addWidget(m_pb_3,2,4);
+                                grid->addWidget(m_pb_4,3,4);
+                                grid->addWidget(m_pb_5,4,2);
+                                grid->addWidget(m_pb_6,3,0);
+                                grid->addWidget(m_pb_7,2,0);
+                            }
+                        }
+                        else
+                        {
+                            grid->addWidget(m_pb_0,1,0);
+                            grid->addWidget(m_pb_1,0,2);
+                            grid->addWidget(m_pb_2,1,4);
+                            grid->addWidget(m_pb_3,2,4);
+                            grid->addWidget(m_pb_4,3,4);
+                            grid->addWidget(m_pb_5,4,2);
+                            grid->addWidget(m_pb_6,3,0);
+                        }
+                    }
+                    else
+                    {
+                        grid->addWidget(m_pb_0,1,0);
+                        grid->addWidget(m_pb_1,1,3);
+                        grid->addWidget(m_pb_2,2,3);
+                        grid->addWidget(m_pb_3,3,3);
+                        grid->addWidget(m_pb_4,3,0);
+                        grid->addWidget(m_pb_5,2,0);
+                    }
+                }
+                else
+                {
+                    grid->addWidget(m_pb_0,1,0);
+                    grid->addWidget(m_pb_1,1,3);
+                    grid->addWidget(m_pb_2,2,3);
+                    grid->addWidget(m_pb_3,3,3);
+                    grid->addWidget(m_pb_4,3,0);
+                }
+            }
+            else
+            {
+                grid->addWidget(m_pb_0,1,0);
+                grid->addWidget(m_pb_1,1,3);
+                grid->addWidget(m_pb_2,3,3);
+                grid->addWidget(m_pb_3,3,0);
+            }
+        }
+        else
+        {
+            grid->addWidget(m_pb_0,1,0);
+            grid->addWidget(m_pb_1,1,3);
+            grid->addWidget(m_pb_2,3,3);
+        }
+    }
+    else
+    {
+        grid->addWidget(m_pb_0,2,0);
+        grid->addWidget(m_pb_1,2,3);
+    }
+    QGroupBox*      groupbox    =   new QGroupBox("Table", this);
+    groupbox->setLayout(grid);
+    return groupbox;
 }
