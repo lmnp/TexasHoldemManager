@@ -19,6 +19,9 @@ public:
 signals:
 
 public slots:
+    void        on_pb_call_released();
+    void        on_pb_fold_released();
+    void        on_pb_check_released();
 
 private:
     PlayerWidget* m_player0;
@@ -32,6 +35,16 @@ private:
     PlayerWidget* m_player8;
     PlayerWidget* m_player9;
     PlayerWidget* m_currentPlayer;
+    QLabel      * m_amount0;
+    QLabel      * m_amount1;
+    QLabel      * m_amount2;
+    QLabel      * m_amount3;
+    QLabel      * m_amount4;
+    QLabel      * m_amount5;
+    QLabel      * m_amount6;
+    QLabel      * m_amount7;
+    QLabel      * m_amount8;
+    QLabel      * m_amount9;
     int           m_status[10]; //2-bet placed, 1-yet to go,0-current turn,-1-out(folded),-2-not playing
     QTabWidget  * makeTabWidget();
     QGroupBox   * makeCurrentGroupBox();
