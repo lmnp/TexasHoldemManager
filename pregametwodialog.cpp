@@ -238,6 +238,7 @@ QPushButton* PreGameTwoDialog::nextButton()
 {
     QPushButton* pushButton = new QPushButton(tr("Next"), this);
     pushButton->setMinimumSize(150,100);
+    pushButton->setDefault(true);
     connect(pushButton, SIGNAL(released()), this, SLOT(on_pb_next_released()));
     return pushButton;
 }

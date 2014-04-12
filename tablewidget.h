@@ -72,10 +72,9 @@ private:
 
     RaiseDialog * m_raise;
 
-    int           m_status[10]; //2-bet placed, 1-yet to go,0-current turn,-1-out(folded),-2-not playing
-
 
     int           m_pot;
+    QLabel      * m_lpot;
     int           m_currentBet;
     int           m_sblind;
     int           m_bblind;

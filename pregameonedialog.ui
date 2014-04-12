@@ -29,12 +29,18 @@
             <property name="text">
              <string>Number of Players</string>
             </property>
+            <property name="buddy">
+             <cstring>le_players</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="l_blinds">
             <property name="text">
              <string>Blinds (small)</string>
+            </property>
+            <property name="buddy">
+             <cstring>le_blinds</cstring>
             </property>
            </widget>
           </item>
@@ -87,7 +93,7 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>150</width>
+         <width>9999</width>
          <height>100</height>
         </size>
        </property>
@@ -115,7 +121,7 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>150</width>
+         <width>9999</width>
          <height>100</height>
         </size>
        </property>
@@ -124,6 +130,12 @@
        </property>
        <property name="text">
         <string>Next</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
