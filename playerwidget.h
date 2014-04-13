@@ -8,7 +8,7 @@ class PlayerWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PlayerWidget(QWidget *parent = 0, QString name = "", int amount = 1000, bool start = false, bool in = true);
+    explicit PlayerWidget(QWidget *parent = 0, QString name = "", int amount = 1000, bool in = true);
     QString         getName() const      {return m_name;}
     int             getAmount() const    {return m_amount;}
     PlayerWidget*   getNextPlayer() const{return m_nextPlayer;}
@@ -28,7 +28,6 @@ private:
     QString         m_name;
     int             m_amount;
     int             m_lastBet;
-    bool            m_startRound;
     bool            m_inGame;
     PlayerWidget*   m_nextPlayer;
 };

@@ -11,10 +11,14 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
     m_playersStillIn            = m_numberOfPlayers;
     m_pot                       = 0;
     m_currentBet                = 0;
-    m_player0                   = new PlayerWidget(this, names[0], amounts[0], true);
+    m_round                     = 0;
+    m_player0                   = new PlayerWidget(this, names[0], amounts[0]);
     m_player1                   = new PlayerWidget(this, names[1], amounts[1]);
     m_player0->setNextPlayer(m_player1);
     m_currentPlayer             = m_player0;
+    m_roundStartPlayer          = m_player0;
+    m_sBlindPlayer              = m_player0;
+    m_bBlindPlayer              = m_player1;
     if(m_numberOfPlayers >= 3)
     {
         m_player2                   = new PlayerWidget(this, names[2], amounts[2]);
@@ -87,7 +91,37 @@ void        TableWidget::on_pb_call_released()
     emit    potChanged(m_pot);
     if(m_playersStillIn > 1)
     {
-        if(m_currentPlayer->getNextPlayer()->getGameStatus())
+        if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
+        {
+            if(!m_roundStartPlayer->getGameStatus())
+            {
+                PlayerWidget* temp = m_roundStartPlayer->getNextPlayer();
+                while(!temp->getGameStatus())
+                {
+                    temp = temp->getNextPlayer();
+                }
+                if(temp->getLastBet() == m_currentBet)
+                {
+                    m_round++;
+                    emit roundChanged(m_round);
+                }
+                m_currentPlayer = temp;
+                emit playerChanged(m_currentPlayer->getName());
+                emit amountChanged(m_currentPlayer->getAmount());
+            }
+            else
+            {
+                if(m_roundStartPlayer->getLastBet() == m_currentBet)
+                {
+                    m_round++;
+                    emit roundChanged(m_round);
+                }
+                m_currentPlayer = m_roundStartPlayer;
+                emit playerChanged(m_currentPlayer->getName());
+                emit amountChanged(m_currentPlayer->getAmount());
+            }
+        }
+        else if(m_currentPlayer->getNextPlayer()->getGameStatus())
         {
             m_currentPlayer = m_currentPlayer->getNextPlayer();
             emit playerChanged(m_currentPlayer->getName());
@@ -113,7 +147,37 @@ void        TableWidget::on_pb_fold_released()
     m_playersStillIn--;
     if(m_playersStillIn > 1)
     {
-        if(m_currentPlayer->getNextPlayer()->getGameStatus())
+        if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
+        {
+            if(!m_roundStartPlayer->getGameStatus())
+            {
+                PlayerWidget* temp = m_roundStartPlayer->getNextPlayer();
+                while(!temp->getGameStatus())
+                {
+                    temp = temp->getNextPlayer();
+                }
+                if(temp->getLastBet() == m_currentBet)
+                {
+                    m_round++;
+                    emit roundChanged(m_round);
+                }
+                m_currentPlayer = temp;
+                emit playerChanged(m_currentPlayer->getName());
+                emit amountChanged(m_currentPlayer->getAmount());
+            }
+            else
+            {
+                if(m_roundStartPlayer->getLastBet() == m_currentBet)
+                {
+                    m_round++;
+                    emit roundChanged(m_round);
+                }
+                m_currentPlayer = m_roundStartPlayer;
+                emit playerChanged(m_currentPlayer->getName());
+                emit amountChanged(m_currentPlayer->getAmount());
+            }
+        }
+        else if(m_currentPlayer->getNextPlayer()->getGameStatus())
         {
             m_currentPlayer = m_currentPlayer->getNextPlayer();
             emit playerChanged(m_currentPlayer->getName());
@@ -143,7 +207,37 @@ void        TableWidget::on_pb_check_released()
         m_currentBet    =   0;
         if(m_playersStillIn > 1)
         {
-            if(m_currentPlayer->getNextPlayer()->getGameStatus())
+            if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
+            {
+                if(!m_roundStartPlayer->getGameStatus())
+                {
+                    PlayerWidget* temp = m_roundStartPlayer->getNextPlayer();
+                    while(!temp->getGameStatus())
+                    {
+                        temp = temp->getNextPlayer();
+                    }
+                    if(temp->getLastBet() == m_currentBet)
+                    {
+                        m_round++;
+                        emit roundChanged(m_round);
+                    }
+                    m_currentPlayer = temp;
+                    emit playerChanged(m_currentPlayer->getName());
+                    emit amountChanged(m_currentPlayer->getAmount());
+                }
+                else
+                {
+                    if(m_roundStartPlayer->getLastBet() == m_currentBet)
+                    {
+                        m_round++;
+                        emit roundChanged(m_round);
+                    }
+                    m_currentPlayer = m_roundStartPlayer;
+                    emit playerChanged(m_currentPlayer->getName());
+                    emit amountChanged(m_currentPlayer->getAmount());
+                }
+            }
+            else if(m_currentPlayer->getNextPlayer()->getGameStatus())
             {
                 m_currentPlayer = m_currentPlayer->getNextPlayer();
                 emit playerChanged(m_currentPlayer->getName());
@@ -182,7 +276,37 @@ void    TableWidget::on_raised_confirmed(int x)
         emit    potChanged(m_pot);
         if(m_playersStillIn > 1)
         {
-            if(m_currentPlayer->getNextPlayer()->getGameStatus())
+            if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
+            {
+                if(!m_roundStartPlayer->getGameStatus())
+                {
+                    PlayerWidget* temp = m_roundStartPlayer->getNextPlayer();
+                    while(!temp->getGameStatus())
+                    {
+                        temp = temp->getNextPlayer();
+                    }
+                    if(temp->getLastBet() == m_currentBet)
+                    {
+                        m_round++;
+                        emit roundChanged(m_round);
+                    }
+                    m_currentPlayer = temp;
+                    emit playerChanged(m_currentPlayer->getName());
+                    emit amountChanged(m_currentPlayer->getAmount());
+                }
+                else
+                {
+                    if(m_roundStartPlayer->getLastBet() == m_currentBet)
+                    {
+                        m_round++;
+                        emit roundChanged(m_round);
+                    }
+                    m_currentPlayer = m_roundStartPlayer;
+                    emit playerChanged(m_currentPlayer->getName());
+                    emit amountChanged(m_currentPlayer->getAmount());
+                }
+            }
+            else if(m_currentPlayer->getNextPlayer()->getGameStatus())
             {
                 m_currentPlayer = m_currentPlayer->getNextPlayer();
                 emit playerChanged(m_currentPlayer->getName());
@@ -385,6 +509,11 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
     m_lpot                  =   new QLabel("0",this);
     m_lpot->setAlignment(Qt::AlignCenter);
     connect(this,   SIGNAL(potChanged(int)),    m_lpot, SLOT(setNum(int)));
+    QLabel*         round   =   new QLabel("Round: ", this);
+    round->setAlignment(Qt::AlignCenter);
+    m_lround                =   new QLabel("0", this);
+    m_lround->setAlignment(Qt::AlignCenter);
+    connect(this,   SIGNAL(roundChanged(int)),  m_lround,   SLOT(setNum(int)));
     m_pb_0  =   new QPushButton(m_player0->getName(),this);
     m_pb_1  =   new QPushButton(m_player1->getName(),this);
     if(m_numberOfPlayers >= 3)
@@ -423,6 +552,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                                     grid->addWidget(m_pb_9,2,0);
                                     grid->addWidget(pot,1,1);
                                     grid->addWidget(m_lpot,1,2);
+                                    grid->addWidget(round,2,1);
+                                    grid->addWidget(m_lround,2,2);
 
                                 }
                                 else
@@ -438,6 +569,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                                     grid->addWidget(m_pb_8,3,0);
                                     grid->addWidget(pot,1,1);
                                     grid->addWidget(m_lpot,1,2);
+                                    grid->addWidget(round,2,1);
+                                    grid->addWidget(m_lround,2,2);
                                 }
                             }
                             else
@@ -452,6 +585,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                                 grid->addWidget(m_pb_7,2,0);
                                 grid->addWidget(pot,1,1);
                                 grid->addWidget(m_lpot,1,3);
+                                grid->addWidget(round,2,1);
+                                grid->addWidget(m_lround,2,3);
                             }
                         }
                         else
@@ -465,6 +600,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                             grid->addWidget(m_pb_6,3,0);
                             grid->addWidget(pot,1,1);
                             grid->addWidget(m_lpot,1,3);
+                            grid->addWidget(round,2,1);
+                            grid->addWidget(m_lround,2,3);
                         }
                     }
                     else
@@ -477,6 +614,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                         grid->addWidget(m_pb_5,2,0);
                         grid->addWidget(pot,1,1);
                         grid->addWidget(m_lpot,1,2);
+                        grid->addWidget(round,2,1);
+                        grid->addWidget(m_lround,2,2);
                     }
                 }
                 else
@@ -488,6 +627,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                     grid->addWidget(m_pb_4,3,0);
                     grid->addWidget(pot,1,1);
                     grid->addWidget(m_lpot,1,2);
+                    grid->addWidget(round,2,1);
+                    grid->addWidget(m_lround,2,2);
                 }
             }
             else
@@ -498,6 +639,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                 grid->addWidget(m_pb_3,3,0);
                 grid->addWidget(pot,1,1);
                 grid->addWidget(m_lpot,1,2);
+                grid->addWidget(round,2,1);
+                grid->addWidget(m_lround,2,2);
             }
         }
         else
@@ -507,6 +650,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
             grid->addWidget(m_pb_2,3,3);
             grid->addWidget(pot,1,1);
             grid->addWidget(m_lpot,1,2);
+            grid->addWidget(round,2,1);
+            grid->addWidget(m_lround,2,2);
         }
     }
     else
@@ -515,6 +660,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
         grid->addWidget(m_pb_1,2,3);
         grid->addWidget(pot,1,1);
         grid->addWidget(m_lpot,1,2);
+        grid->addWidget(round,3,1);
+        grid->addWidget(m_lround,3,2);
     }
     QGroupBox*      groupbox    =   new QGroupBox("Table", this);
     groupbox->setLayout(grid);

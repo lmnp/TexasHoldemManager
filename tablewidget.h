@@ -21,6 +21,7 @@ signals:
     void        playerChanged(QString x);
     void        amountChanged(int x);
     void        potChanged(int x);
+    void        roundChanged(int x);
 
 public slots:
     void        on_pb_call_released();
@@ -52,6 +53,9 @@ private:
     QLabel      * m_amount9;
 
     PlayerWidget* m_currentPlayer;
+    PlayerWidget* m_roundStartPlayer;
+    PlayerWidget* m_sBlindPlayer;
+    PlayerWidget* m_bBlindPlayer;
     QLabel      * m_currentPlayerName;
     QLabel      * m_currentPlayerAmount;
 
@@ -77,12 +81,16 @@ private:
 
     int           m_pot;
     QLabel      * m_lpot;
+
+    int           m_round;
+    QLabel      * m_lround;
+
     int           m_currentBet;
     int           m_sblind;
     int           m_bblind;
     int           m_numberOfPlayers;
     int           m_playersStillIn;
-    int           m_round;
+
 };
 
 #endif // TABLEWIDGET_H
