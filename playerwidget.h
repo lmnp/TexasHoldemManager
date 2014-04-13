@@ -15,6 +15,7 @@ public:
     bool            getGameStatus() const{return m_inGame;}
     int             getLastBet() const   {return m_lastBet;}
     void            changeAmount(int amount) {m_amount -= amount; m_lastBet = amount; emit amountChanged(m_amount);}
+    void            changeLastBet(int amount){m_lastBet = amount;}
     void            setNextPlayer(PlayerWidget* np){m_nextPlayer = np;}
     void            setGameStatus(bool in)  {m_inGame = in;}
 

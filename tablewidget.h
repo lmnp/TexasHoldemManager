@@ -19,6 +19,8 @@ public:
 
 signals:
     void        playerChanged(QString x);
+    void        amountChanged(int x);
+    void        potChanged(int x);
 
 public slots:
     void        on_pb_call_released();
