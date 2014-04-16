@@ -29,6 +29,16 @@ public slots:
     void        on_pb_check_released();
     void        on_pb_raise_released();
     void        on_raised_confirmed(int x);
+    void        on_pb_0_released();
+    void        on_pb_1_released();
+    void        on_pb_2_released();
+    void        on_pb_3_released();
+    void        on_pb_4_released();
+    void        on_pb_5_released();
+    void        on_pb_6_released();
+    void        on_pb_7_released();
+    void        on_pb_8_released();
+    void        on_pb_9_released();
 
 private:
     PlayerWidget* m_player0;
@@ -84,6 +94,7 @@ private:
 
     int           m_round;
     QLabel      * m_lround;
+    bool          m_pickWinner;
 
     int           m_currentBet;
     int           m_sblind;

@@ -19,6 +19,13 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
     m_roundStartPlayer          = m_player0;
     m_sBlindPlayer              = m_player0;
     m_bBlindPlayer              = m_player1;
+    m_sBlindPlayer->minusAmount(m_sblind);
+    m_pot                      += m_sblind;
+    m_sBlindPlayer->changeLastBet(0);
+    m_bBlindPlayer->minusAmount(m_bblind);
+    m_pot                      += m_bblind;
+    m_bBlindPlayer->changeLastBet(0);
+    m_pickWinner                = false;
     if(m_numberOfPlayers >= 3)
     {
         m_player2                   = new PlayerWidget(this, names[2], amounts[2]);
@@ -85,11 +92,11 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
 void        TableWidget::on_pb_call_released()
 {
     int diff    =   m_currentBet    -   m_currentPlayer->getLastBet();
-    m_currentPlayer->changeAmount(diff);
+    m_currentPlayer->minusAmount(diff);
     m_currentPlayer->changeLastBet(m_currentBet);
     m_pot   +=  diff;
     emit    potChanged(m_pot);
-    if(m_playersStillIn > 1)
+    if(m_round < 4)
     {
         if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
         {
@@ -104,6 +111,15 @@ void        TableWidget::on_pb_call_released()
                 {
                     m_round++;
                     emit roundChanged(m_round);
+                    PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                    int i = 0;
+                    while(i < m_numberOfPlayers)
+                    {
+                        temp1->changeLastBet(0);
+                        temp1   =   temp1->getNextPlayer();
+                        i++;
+                    }
+                    m_currentBet = 0;
                 }
                 m_currentPlayer = temp;
                 emit playerChanged(m_currentPlayer->getName());
@@ -115,6 +131,15 @@ void        TableWidget::on_pb_call_released()
                 {
                     m_round++;
                     emit roundChanged(m_round);
+                    PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                    int i = 0;
+                    while(i < m_numberOfPlayers)
+                    {
+                        temp1->changeLastBet(0);
+                        temp1   =   temp1->getNextPlayer();
+                        i++;
+                    }
+                    m_currentBet = 0;
                 }
                 m_currentPlayer = m_roundStartPlayer;
                 emit playerChanged(m_currentPlayer->getName());
@@ -139,13 +164,17 @@ void        TableWidget::on_pb_call_released()
             emit amountChanged(m_currentPlayer->getAmount());
         }
     }
+    else
+    {
+        m_pickWinner    =   true;
+    }
 }
 
 void        TableWidget::on_pb_fold_released()
 {
     m_currentPlayer->setGameStatus(false);
     m_playersStillIn--;
-    if(m_playersStillIn > 1)
+    if(m_playersStillIn > 1 && m_round < 4)
     {
         if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
         {
@@ -160,6 +189,15 @@ void        TableWidget::on_pb_fold_released()
                 {
                     m_round++;
                     emit roundChanged(m_round);
+                    PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                    int i = 0;
+                    while(i < m_numberOfPlayers)
+                    {
+                        temp1->changeLastBet(0);
+                        temp1   =   temp1->getNextPlayer();
+                        i++;
+                    }
+                    m_currentBet = 0;
                 }
                 m_currentPlayer = temp;
                 emit playerChanged(m_currentPlayer->getName());
@@ -171,6 +209,15 @@ void        TableWidget::on_pb_fold_released()
                 {
                     m_round++;
                     emit roundChanged(m_round);
+                    PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                    int i = 0;
+                    while(i < m_numberOfPlayers)
+                    {
+                        temp1->changeLastBet(0);
+                        temp1   =   temp1->getNextPlayer();
+                        i++;
+                    }
+                    m_currentBet = 0;
                 }
                 m_currentPlayer = m_roundStartPlayer;
                 emit playerChanged(m_currentPlayer->getName());
@@ -194,6 +241,40 @@ void        TableWidget::on_pb_fold_released()
             emit playerChanged(m_currentPlayer->getName());
             emit amountChanged(m_currentPlayer->getAmount());
         }
+    }
+    else if(m_playersStillIn == 1)
+    {
+        PlayerWidget* temp  =   m_currentPlayer->getNextPlayer();
+        while(!temp->getGameStatus())
+        {
+            temp    =   temp->getNextPlayer();
+        }
+        temp->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_currentPlayer =   temp;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_round =   0;
+        emit roundChanged(m_round);
+        m_currentBet = 0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+    }
+    else
+    {
+        m_pickWinner    =   true;
     }
 }
 
@@ -203,9 +284,9 @@ void        TableWidget::on_pb_check_released()
     emit    potChanged(m_pot);
     if(m_currentBet == 0)
     {
-        m_currentPlayer->changeAmount(0);
+        m_currentPlayer->minusAmount(0);
         m_currentBet    =   0;
-        if(m_playersStillIn > 1)
+        if(m_round  <   4)
         {
             if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
             {
@@ -220,6 +301,15 @@ void        TableWidget::on_pb_check_released()
                     {
                         m_round++;
                         emit roundChanged(m_round);
+                        PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                        int i = 0;
+                        while(i < m_numberOfPlayers)
+                        {
+                            temp1->changeLastBet(0);
+                            temp1   =   temp1->getNextPlayer();
+                            i++;
+                        }
+                        m_currentBet = 0;
                     }
                     m_currentPlayer = temp;
                     emit playerChanged(m_currentPlayer->getName());
@@ -231,6 +321,15 @@ void        TableWidget::on_pb_check_released()
                     {
                         m_round++;
                         emit roundChanged(m_round);
+                        PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                        int i = 0;
+                        while(i < m_numberOfPlayers)
+                        {
+                            temp1->changeLastBet(0);
+                            temp1   =   temp1->getNextPlayer();
+                            i++;
+                        }
+                        m_currentBet = 0;
                     }
                     m_currentPlayer = m_roundStartPlayer;
                     emit playerChanged(m_currentPlayer->getName());
@@ -254,6 +353,10 @@ void        TableWidget::on_pb_check_released()
                 emit playerChanged(m_currentPlayer->getName());
                 emit amountChanged(m_currentPlayer->getAmount());
             }
+        }
+        else
+        {
+            m_pickWinner    =   true;
         }
     }
 }
@@ -270,11 +373,11 @@ void    TableWidget::on_raised_confirmed(int x)
 {
     if(x != 0)
     {
-        m_currentPlayer->changeAmount(x);
+        m_currentPlayer->minusAmount(x);
         m_currentBet    =   x;
         m_pot   +=  x;
         emit    potChanged(m_pot);
-        if(m_playersStillIn > 1)
+        if(m_round  <   4)
         {
             if(m_currentPlayer->getNextPlayer() == m_roundStartPlayer)
             {
@@ -289,6 +392,15 @@ void    TableWidget::on_raised_confirmed(int x)
                     {
                         m_round++;
                         emit roundChanged(m_round);
+                        PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                        int i = 0;
+                        while(i < m_numberOfPlayers)
+                        {
+                            temp1->changeLastBet(0);
+                            temp1   =   temp1->getNextPlayer();
+                            i++;
+                        }
+                        m_currentBet = 0;
                     }
                     m_currentPlayer = temp;
                     emit playerChanged(m_currentPlayer->getName());
@@ -300,6 +412,15 @@ void    TableWidget::on_raised_confirmed(int x)
                     {
                         m_round++;
                         emit roundChanged(m_round);
+                        PlayerWidget* temp1 =   m_currentPlayer->getNextPlayer();
+                        int i = 0;
+                        while(i < m_numberOfPlayers)
+                        {
+                            temp1->changeLastBet(0);
+                            temp1   =   temp1->getNextPlayer();
+                            i++;
+                        }
+                        m_currentBet = 0;
                     }
                     m_currentPlayer = m_roundStartPlayer;
                     emit playerChanged(m_currentPlayer->getName());
@@ -324,10 +445,354 @@ void    TableWidget::on_raised_confirmed(int x)
                 emit amountChanged(m_currentPlayer->getAmount());
             }
         }
+        else
+        {
+            m_pickWinner    =   true;
+        }
     }
     else
     {
             return;
+    }
+}
+
+void    TableWidget::on_pb_0_released()
+{
+    if(m_pickWinner)
+    {
+        m_player0->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_1_released()
+{
+    if(m_pickWinner)
+    {
+        m_player1->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_2_released()
+{
+    if(m_pickWinner)
+    {
+        m_player2->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_3_released()
+{
+    if(m_pickWinner)
+    {
+        m_player3->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_4_released()
+{
+    if(m_pickWinner)
+    {
+        m_player4->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_5_released()
+{
+    if(m_pickWinner)
+    {
+        m_player5->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_6_released()
+{
+    if(m_pickWinner)
+    {
+        m_player6->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_7_released()
+{
+    if(m_pickWinner)
+    {
+        m_player7->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_8_released()
+{
+    if(m_pickWinner)
+    {
+        m_player8->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
+    }
+}
+
+void    TableWidget::on_pb_9_released()
+{
+    if(m_pickWinner)
+    {
+        m_player9->plusAmount(m_pot);
+        m_pot   =   0;
+        emit    potChanged(m_pot);
+        m_round =   0;
+        emit    roundChanged(m_round);
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
+        emit    playerChanged(m_currentPlayer->getName());
+        emit    amountChanged(m_currentPlayer->getAmount());
+        m_currentBet    =   0;
+        int i = 0;
+        while(i < m_numberOfPlayers)
+        {
+            PlayerWidget*   temp    =   m_currentPlayer->getNextPlayer();
+            if(!temp->getNextPlayer()->getGameStatus())
+            {
+                temp->getNextPlayer()->changeLastBet(0);
+                temp->getNextPlayer()->setGameStatus(true);
+                m_playersStillIn++;
+            }
+            else
+                temp    =   temp->getNextPlayer();
+            i++;
+        }
+        m_pickWinner    =   false;
     }
 }
 
@@ -491,7 +956,6 @@ QGroupBox*  TableWidget::makeOtherGroupBox()
     return groupbox;
 }
 
-
 QTabWidget* TableWidget::makeTabWidget()
 {
     QTabWidget *maketable = new QTabWidget(this);
@@ -506,7 +970,7 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
     QGridLayout*    grid    =   new QGridLayout(this);
     QLabel*         pot     =   new QLabel("Pot: ", this);
     pot->setAlignment(Qt::AlignCenter);
-    m_lpot                  =   new QLabel("0",this);
+    m_lpot                  =   new QLabel(QString::number(m_pot),this);
     m_lpot->setAlignment(Qt::AlignCenter);
     connect(this,   SIGNAL(potChanged(int)),    m_lpot, SLOT(setNum(int)));
     QLabel*         round   =   new QLabel("Round: ", this);
@@ -515,31 +979,41 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
     m_lround->setAlignment(Qt::AlignCenter);
     connect(this,   SIGNAL(roundChanged(int)),  m_lround,   SLOT(setNum(int)));
     m_pb_0  =   new QPushButton(m_player0->getName(),this);
+    connect(m_pb_0, SIGNAL(released()), this,   SLOT(on_pb_0_released()));
     m_pb_1  =   new QPushButton(m_player1->getName(),this);
+    connect(m_pb_1, SIGNAL(released()), this,   SLOT(on_pb_1_released()));
     if(m_numberOfPlayers >= 3)
     {
         m_pb_2  =   new QPushButton(m_player2->getName(),this);
+        connect(m_pb_2, SIGNAL(released()), this,   SLOT(on_pb_2_released()));
         if(m_numberOfPlayers >= 4)
         {
             m_pb_3  =   new QPushButton(m_player3->getName(),this);
+            connect(m_pb_3, SIGNAL(released()), this,   SLOT(on_pb_3_released()));
             if(m_numberOfPlayers >= 5)
             {
                 m_pb_4  =   new QPushButton(m_player4->getName(),this);
+                connect(m_pb_4, SIGNAL(released()), this,   SLOT(on_pb_4_released()));
                 if(m_numberOfPlayers >= 6)
                 {
                     m_pb_5  =   new QPushButton(m_player5->getName(),this);
+                    connect(m_pb_5, SIGNAL(released()), this,   SLOT(on_pb_5_released()));
                     if(m_numberOfPlayers >= 7)
                     {
                         m_pb_6  =   new QPushButton(m_player6->getName(),this);
+                        connect(m_pb_6, SIGNAL(released()), this,   SLOT(on_pb_6_released()));
                         if(m_numberOfPlayers >= 8)
                         {
                             m_pb_7  =   new QPushButton(m_player7->getName(),this);
+                            connect(m_pb_7, SIGNAL(released()), this,   SLOT(on_pb_7_released()));
                             if(m_numberOfPlayers >= 9)
                             {
                                 m_pb_8  =   new QPushButton(m_player8->getName(),this);
+                                connect(m_pb_8, SIGNAL(released()), this,   SLOT(on_pb_8_released()));
                                 if(m_numberOfPlayers == 10)
                                 {
                                     m_pb_9  =   new QPushButton(m_player9->getName(),this);
+                                    connect(m_pb_9, SIGNAL(released()), this,   SLOT(on_pb_9_released()));
                                     grid->addWidget(m_pb_0,1,0);
                                     grid->addWidget(m_pb_1,0,1);
                                     grid->addWidget(m_pb_2,0,2);
