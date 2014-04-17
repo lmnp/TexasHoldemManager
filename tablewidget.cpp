@@ -92,9 +92,22 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
 void        TableWidget::on_pb_call_released()
 {
     int diff    =   m_currentBet    -   m_currentPlayer->getLastBet();
-    m_currentPlayer->minusAmount(diff);
-    m_currentPlayer->changeLastBet(m_currentBet);
-    m_pot   +=  diff;
+    if(diff > 0)
+    {
+        if(m_currentPlayer->getAmount() > diff)
+        {
+            m_currentPlayer->minusAmount(diff);
+            m_currentPlayer->changeLastBet(m_currentBet);
+            m_pot   +=  diff;
+        }
+        else
+        {
+            int c_amount    =   m_currentPlayer->getAmount();
+            m_currentPlayer->minusAmount(c_amount);
+            m_currentPlayer->changeLastBet(c_amount);
+            m_pot   +=  c_amount;
+        }
+    }
     emit    potChanged(m_pot);
     if(m_round < 4)
     {
@@ -251,26 +264,32 @@ void        TableWidget::on_pb_fold_released()
         }
         temp->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
-        m_currentPlayer =   temp;
+        m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
+        m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
         emit    amountChanged(m_currentPlayer->getAmount());
         m_round =   0;
         emit roundChanged(m_round);
         m_currentBet = 0;
-        int i = 0;
-        while(i < m_numberOfPlayers)
+        temp    =   m_currentPlayer->getNextPlayer();
+        while(temp != m_currentPlayer)
         {
-            if(!temp->getNextPlayer()->getGameStatus())
-            {
-                temp->getNextPlayer()->changeLastBet(0);
-                temp->getNextPlayer()->setGameStatus(true);
-                m_playersStillIn++;
-            }
-            else
-                temp    =   temp->getNextPlayer();
-            i++;
+            temp->changeLastBet(0);
+            temp->setGameStatus(true);
+            m_playersStillIn++;
+            temp    =   temp->getNextPlayer();
         }
+        m_sblind       +=   5;
+        m_bblind        =   2*m_sblind;
+        m_pot          +=   m_sblind;
+        m_pot          +=   m_bblind;
+        m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
+        m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        emit    potChanged(m_pot);
     }
     else
     {
@@ -462,11 +481,18 @@ void    TableWidget::on_pb_0_released()
     {
         m_player0->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -496,11 +522,18 @@ void    TableWidget::on_pb_1_released()
     {
         m_player1->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -530,11 +563,18 @@ void    TableWidget::on_pb_2_released()
     {
         m_player2->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -564,11 +604,18 @@ void    TableWidget::on_pb_3_released()
     {
         m_player3->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -598,11 +645,18 @@ void    TableWidget::on_pb_4_released()
     {
         m_player4->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -632,11 +686,18 @@ void    TableWidget::on_pb_5_released()
     {
         m_player5->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -666,11 +727,18 @@ void    TableWidget::on_pb_6_released()
     {
         m_player6->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -700,11 +768,18 @@ void    TableWidget::on_pb_7_released()
     {
         m_player7->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -734,11 +809,18 @@ void    TableWidget::on_pb_8_released()
     {
         m_player8->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());
@@ -768,11 +850,18 @@ void    TableWidget::on_pb_9_released()
     {
         m_player9->plusAmount(m_pot);
         m_pot   =   0;
-        emit    potChanged(m_pot);
         m_round =   0;
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
+        m_sblind       +=   5;
+        m_sBlindPlayer->minusAmount(m_sblind);
+        m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
+        m_bblind        =   2*m_sblind;
+        m_bBlindPlayer->minusAmount(m_bblind);
+        m_bBlindPlayer->changeLastBet(0);
+        m_pot          +=   m_sblind + m_bblind;
+        emit    potChanged(m_pot);
         m_roundStartPlayer  =   m_roundStartPlayer->getNextPlayer();
         m_currentPlayer =   m_roundStartPlayer;
         emit    playerChanged(m_currentPlayer->getName());

@@ -14,7 +14,7 @@ public:
     PlayerWidget*   getNextPlayer() const{return m_nextPlayer;}
     bool            getGameStatus() const{return m_inGame;}
     int             getLastBet() const   {return m_lastBet;}
-    void            minusAmount(int amount) {m_amount -= amount; m_lastBet = amount; emit amountChanged(m_amount);}
+    void            minusAmount(int amount) {if(m_amount == 0) m_inGame = false;if(m_amount > amount)m_amount -= amount;else m_amount -= m_amount; m_lastBet = amount; emit amountChanged(m_amount);}
     void            plusAmount(int amount)  {m_amount += amount; emit amountChanged(m_amount);}
     void            changeLastBet(int amount){m_lastBet = amount;}
     void            setNextPlayer(PlayerWidget* np){m_nextPlayer = np;}
