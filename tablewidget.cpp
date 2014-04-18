@@ -280,6 +280,7 @@ void        TableWidget::on_pb_fold_released()
             temp    =   temp->getNextPlayer();
         }
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_bblind        =   2*m_sblind;
         m_pot          +=   m_sblind;
         m_pot          +=   m_bblind;
@@ -485,6 +486,7 @@ void    TableWidget::on_pb_0_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -526,6 +528,7 @@ void    TableWidget::on_pb_1_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -567,6 +570,7 @@ void    TableWidget::on_pb_2_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -608,6 +612,7 @@ void    TableWidget::on_pb_3_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -649,6 +654,7 @@ void    TableWidget::on_pb_4_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -690,6 +696,7 @@ void    TableWidget::on_pb_5_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -731,6 +738,7 @@ void    TableWidget::on_pb_6_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -772,6 +780,7 @@ void    TableWidget::on_pb_7_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -813,6 +822,7 @@ void    TableWidget::on_pb_8_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -854,6 +864,7 @@ void    TableWidget::on_pb_9_released()
         emit    roundChanged(m_round);
         m_sBlindPlayer  =   m_sBlindPlayer->getNextPlayer();
         m_sblind       +=   5;
+        emit sblindChanged(m_sblind);
         m_sBlindPlayer->minusAmount(m_sblind);
         m_sBlindPlayer->changeLastBet(0);
         m_bBlindPlayer  =   m_bBlindPlayer->getNextPlayer();
@@ -882,6 +893,30 @@ void    TableWidget::on_pb_9_released()
             i++;
         }
         m_pickWinner    =   false;
+    }
+}
+
+void        TableWidget::on_round_changed(int x)
+{
+    if(x == 0)
+    {
+        m_lround->setText("Please Place Initial Bets");
+    }
+    else if(x == 1)
+    {
+        m_lround->setText("FLOP");
+    }
+    else if(x == 2)
+    {
+        m_lround->setText("TURN");
+    }
+    else if(x == 3)
+    {
+        m_lround->setText("RIVER");
+    }
+    else
+    {
+        m_lround->setText("Please Select The Winner");
     }
 }
 
@@ -1064,9 +1099,14 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
     connect(this,   SIGNAL(potChanged(int)),    m_lpot, SLOT(setNum(int)));
     QLabel*         round   =   new QLabel("Round: ", this);
     round->setAlignment(Qt::AlignCenter);
-    m_lround                =   new QLabel("0", this);
+    m_lround                =   new QLabel("Please Place Initial Bets", this);
     m_lround->setAlignment(Qt::AlignCenter);
-    connect(this,   SIGNAL(roundChanged(int)),  m_lround,   SLOT(setNum(int)));
+    connect(this,   SIGNAL(roundChanged(int)),  this,       SLOT(on_round_changed(int)));
+    QLabel*         sblind  =   new QLabel("Small Blind: ", this);
+    sblind->setAlignment(Qt::AlignCenter);
+    m_lsblind               =   new QLabel(QString::number(m_sblind),   this);
+    m_lsblind->setAlignment(Qt::AlignCenter);
+    connect(this,   SIGNAL(sblindChanged(int)), m_lsblind,  SLOT(setNum(int)));
     m_pb_0  =   new QPushButton(m_player0->getName(),this);
     connect(m_pb_0, SIGNAL(released()), this,   SLOT(on_pb_0_released()));
     m_pb_1  =   new QPushButton(m_player1->getName(),this);
@@ -1115,8 +1155,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                                     grid->addWidget(m_pb_9,2,0);
                                     grid->addWidget(pot,1,1);
                                     grid->addWidget(m_lpot,1,2);
-                                    grid->addWidget(round,2,1);
-                                    grid->addWidget(m_lround,2,2);
+                                    grid->addWidget(sblind,2,1);
+                                    grid->addWidget(m_lsblind,2,2);
+                                    grid->addWidget(round,3,1);
+                                    grid->addWidget(m_lround,3,2);
 
                                 }
                                 else
@@ -1132,8 +1174,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                                     grid->addWidget(m_pb_8,3,0);
                                     grid->addWidget(pot,1,1);
                                     grid->addWidget(m_lpot,1,2);
-                                    grid->addWidget(round,2,1);
-                                    grid->addWidget(m_lround,2,2);
+                                    grid->addWidget(sblind,2,1);
+                                    grid->addWidget(m_lsblind,2,2);
+                                    grid->addWidget(round,3,1);
+                                    grid->addWidget(m_lround,3,2);
                                 }
                             }
                             else
@@ -1148,8 +1192,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                                 grid->addWidget(m_pb_7,2,0);
                                 grid->addWidget(pot,1,1);
                                 grid->addWidget(m_lpot,1,3);
-                                grid->addWidget(round,2,1);
-                                grid->addWidget(m_lround,2,3);
+                                grid->addWidget(sblind,2,1);
+                                grid->addWidget(m_lsblind,2,2);
+                                grid->addWidget(round,3,1);
+                                grid->addWidget(m_lround,3,3);
                             }
                         }
                         else
@@ -1163,8 +1209,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                             grid->addWidget(m_pb_6,3,0);
                             grid->addWidget(pot,1,1);
                             grid->addWidget(m_lpot,1,3);
-                            grid->addWidget(round,2,1);
-                            grid->addWidget(m_lround,2,3);
+                            grid->addWidget(sblind,2,1);
+                            grid->addWidget(m_lsblind,2,2);
+                            grid->addWidget(round,3,1);
+                            grid->addWidget(m_lround,3,3);
                         }
                     }
                     else
@@ -1177,8 +1225,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                         grid->addWidget(m_pb_5,2,0);
                         grid->addWidget(pot,1,1);
                         grid->addWidget(m_lpot,1,2);
-                        grid->addWidget(round,2,1);
-                        grid->addWidget(m_lround,2,2);
+                        grid->addWidget(sblind,2,1);
+                        grid->addWidget(m_lsblind,2,2);
+                        grid->addWidget(round,3,1);
+                        grid->addWidget(m_lround,3,2);
                     }
                 }
                 else
@@ -1190,8 +1240,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                     grid->addWidget(m_pb_4,3,0);
                     grid->addWidget(pot,1,1);
                     grid->addWidget(m_lpot,1,2);
-                    grid->addWidget(round,2,1);
-                    grid->addWidget(m_lround,2,2);
+                    grid->addWidget(sblind,2,1);
+                    grid->addWidget(m_lsblind,2,2);
+                    grid->addWidget(round,3,1);
+                    grid->addWidget(m_lround,3,2);
                 }
             }
             else
@@ -1202,8 +1254,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
                 grid->addWidget(m_pb_3,3,0);
                 grid->addWidget(pot,1,1);
                 grid->addWidget(m_lpot,1,2);
-                grid->addWidget(round,2,1);
-                grid->addWidget(m_lround,2,2);
+                grid->addWidget(sblind,2,1);
+                grid->addWidget(m_lsblind,2,2);
+                grid->addWidget(round,3,1);
+                grid->addWidget(m_lround,3,2);
             }
         }
         else
@@ -1213,8 +1267,10 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
             grid->addWidget(m_pb_2,3,3);
             grid->addWidget(pot,1,1);
             grid->addWidget(m_lpot,1,2);
-            grid->addWidget(round,2,1);
-            grid->addWidget(m_lround,2,2);
+            grid->addWidget(sblind,2,1);
+            grid->addWidget(m_lsblind,2,2);
+            grid->addWidget(round,3,1);
+            grid->addWidget(m_lround,3,2);
         }
     }
     else
@@ -1223,6 +1279,8 @@ QGroupBox*  TableWidget::makePlayerPushButtons()
         grid->addWidget(m_pb_1,2,3);
         grid->addWidget(pot,1,1);
         grid->addWidget(m_lpot,1,2);
+        grid->addWidget(sblind,2,1);
+        grid->addWidget(m_lsblind,2,2);
         grid->addWidget(round,3,1);
         grid->addWidget(m_lround,3,2);
     }

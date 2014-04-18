@@ -22,6 +22,7 @@ signals:
     void        amountChanged(int x);
     void        potChanged(int x);
     void        roundChanged(int x);
+    void        sblindChanged(int x);
 
 public slots:
     void        on_pb_call_released();
@@ -39,6 +40,7 @@ public slots:
     void        on_pb_7_released();
     void        on_pb_8_released();
     void        on_pb_9_released();
+    void        on_round_changed(int x);
 
 private:
     PlayerWidget* m_player0;
@@ -98,6 +100,7 @@ private:
 
     int           m_currentBet;
     int           m_sblind;
+    QLabel      * m_lsblind;
     int           m_bblind;
     int           m_numberOfPlayers;
     int           m_playersStillIn;
