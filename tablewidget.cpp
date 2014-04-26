@@ -21,10 +21,8 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
     m_bBlindPlayer              = m_player1;
     m_sBlindPlayer->minusAmount(m_sblind);
     m_pot                      += m_sblind;
-    m_sBlindPlayer->changeLastBet(0);
     m_bBlindPlayer->minusAmount(m_bblind);
     m_pot                      += m_bblind;
-    m_bBlindPlayer->changeLastBet(0);
     m_pickWinner                = false;
     if(m_numberOfPlayers >= 3)
     {
@@ -85,7 +83,7 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
         m_player1->setNextPlayer(m_player0);
     QVBoxLayout* vbox = new QVBoxLayout(this);
     vbox->addWidget(makePlayerPushButtons());
-    vbox->addWidget(makeTabWidget());
+    vbox->addWidget(makeOptionsGroupBox());
     setLayout(vbox);
 }
 
@@ -920,15 +918,10 @@ void        TableWidget::on_round_changed(int x)
     }
 }
 
-QGroupBox*  TableWidget::makeCurrentGroupBox()
+QGroupBox*  TableWidget::makeOptionsGroupBox()
 {
     QGridLayout* grid           =   new QGridLayout(this);
-    QLabel*      l_name         =   new QLabel(tr("Name "));
-    QLabel*      l_amount       =   new QLabel(tr("Amount "));
-    m_currentPlayerName         =   new QLabel(m_currentPlayer->getName());
-    m_currentPlayerAmount       =   new QLabel(QString::number(m_currentPlayer->getAmount()));
-    QGroupBox*   options        =   new QGroupBox(tr("Options"));
-    QGridLayout* o_grid         =   new QGridLayout(this);
+    QGroupBox*   options        =   new QGroupBox(tr("Options"),this);
     QPushButton* pb_raise       =   new QPushButton(tr("Raise"));
     QPushButton* pb_fold        =   new QPushButton(tr("Fold"));
     QPushButton* pb_call        =   new QPushButton(tr("Call"));
@@ -937,156 +930,14 @@ QGroupBox*  TableWidget::makeCurrentGroupBox()
     connect(pb_fold,    SIGNAL(released()), this,   SLOT(on_pb_fold_released()));
     connect(pb_check,   SIGNAL(released()), this,   SLOT(on_pb_check_released()));
     connect(pb_raise,   SIGNAL(released()), this,   SLOT(on_pb_raise_released()));
-    connect(this,            SIGNAL(playerChanged(QString)),    m_currentPlayerName,    SLOT(setText(QString)));
-    connect(this,            SIGNAL(amountChanged(int)),        m_currentPlayerAmount,  SLOT(setNum(int)));
-    grid->addWidget(l_name,0,0);
-    grid->addWidget(l_amount,1,0);
-    grid->addWidget(m_currentPlayerName,0,1);
-    grid->addWidget(m_currentPlayerAmount,1,1);
-    o_grid->addWidget(pb_raise, 0, 0);
-    o_grid->addWidget(pb_fold, 0, 1);
-    o_grid->addWidget(pb_call, 1, 0);
-    o_grid->addWidget(pb_check, 1, 1);
-    options->setLayout(o_grid);
-    grid->addWidget(options, 0, 2, 2, 2);
-    QGroupBox*  groupbox    =    new QGroupBox(this);
-    groupbox->setLayout(grid);
-    return groupbox;
-}
-
-QGroupBox*  TableWidget::makeOtherGroupBox()
-{
-    QGridLayout* grid   =   new QGridLayout(this);
-    QLabel* name = new QLabel(m_player0->getName(),this);
-    name->setAlignment(Qt::AlignCenter);
-    grid->addWidget(name,0,0);
-    name = new QLabel(m_player1->getName(),this);
-    name->setAlignment(Qt::AlignCenter);
-    grid->addWidget(name,1,0);
-    if(m_numberOfPlayers >= 3)
-    {
-        name    =   new QLabel(m_player2->getName(),this);
-        name->setAlignment(Qt::AlignCenter);
-        grid->addWidget(name,2,0);
-        if(m_numberOfPlayers >= 4)
-        {
-            name    =   new QLabel(m_player3->getName(),this);
-            name->setAlignment(Qt::AlignCenter);
-            grid->addWidget(name,3,0);
-            if(m_numberOfPlayers >= 5)
-            {
-                name    =   new QLabel(m_player4->getName(),this);
-                name->setAlignment(Qt::AlignCenter);
-                grid->addWidget(name,4,0);
-                if(m_numberOfPlayers >= 6)
-                {
-                    name    =   new QLabel(m_player5->getName(),this);
-                    name->setAlignment(Qt::AlignCenter);
-                    grid->addWidget(name,5,0);
-                    if(m_numberOfPlayers >= 7)
-                    {
-                        name    =   new QLabel(m_player6->getName(),this);
-                        name->setAlignment(Qt::AlignCenter);
-                        grid->addWidget(name,6,0);
-                        if(m_numberOfPlayers >= 8)
-                        {
-                            name    =   new QLabel(m_player7->getName(),this);
-                            name->setAlignment(Qt::AlignCenter);
-                            grid->addWidget(name,7,0);
-                            if(m_numberOfPlayers >= 9)
-                            {
-                                name    =   new QLabel(m_player8->getName(),this);
-                                name->setAlignment(Qt::AlignCenter);
-                                grid->addWidget(name,8,0);
-                                if(m_numberOfPlayers == 10)
-                                {
-                                    name    =   new QLabel(m_player9->getName(),this);
-                                    name->setAlignment(Qt::AlignCenter);
-                                    grid->addWidget(name,9,0);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    m_amount0 = new QLabel(QString::number(m_player0->getAmount()),this);
-    connect(m_player0, SIGNAL(amountChanged(int)),m_amount0, SLOT(setNum(int)));
-    m_amount0->setAlignment(Qt::AlignCenter);
-    grid->addWidget(m_amount0,0,1);
-    m_amount1 = new QLabel(QString::number(m_player1->getAmount()),this);
-    connect(m_player1, SIGNAL(amountChanged(int)),m_amount1, SLOT(setNum(int)));
-    m_amount1->setAlignment(Qt::AlignCenter);
-    grid->addWidget(m_amount1,1,1);
-    if(m_numberOfPlayers >= 3)
-    {
-        m_amount2    =   new QLabel(QString::number(m_player2->getAmount()),this);
-        connect(m_player2, SIGNAL(amountChanged(int)),m_amount2, SLOT(setNum(int)));
-        m_amount2->setAlignment(Qt::AlignCenter);
-        grid->addWidget(m_amount2,2,1);
-        if(m_numberOfPlayers >= 4)
-        {
-            m_amount3    =   new QLabel(QString::number(m_player3->getAmount()),this);
-            connect(m_player3, SIGNAL(amountChanged(int)),m_amount3, SLOT(setNum(int)));
-            m_amount3->setAlignment(Qt::AlignCenter);
-            grid->addWidget(m_amount3,3,1);
-            if(m_numberOfPlayers >= 5)
-            {
-                m_amount4    =   new QLabel(QString::number(m_player4->getAmount()),this);
-                connect(m_player4, SIGNAL(amountChanged(int)),m_amount4, SLOT(setNum(int)));
-                m_amount4->setAlignment(Qt::AlignCenter);
-                grid->addWidget(m_amount4,4,1);
-                if(m_numberOfPlayers >= 6)
-                {
-                    m_amount5    =   new QLabel(QString::number(m_player5->getAmount()),this);
-                    connect(m_player5, SIGNAL(amountChanged(int)),m_amount5, SLOT(setNum(int)));
-                    m_amount5->setAlignment(Qt::AlignCenter);
-                    grid->addWidget(m_amount5,5,1);
-                    if(m_numberOfPlayers >= 7)
-                    {
-                        m_amount6    =   new QLabel(QString::number(m_player6->getAmount()),this);
-                        connect(m_player6, SIGNAL(amountChanged(int)),m_amount6, SLOT(setNum(int)));
-                        m_amount6->setAlignment(Qt::AlignCenter);
-                        grid->addWidget(m_amount6,6,1);
-                        if(m_numberOfPlayers >= 8)
-                        {
-                            m_amount7    =   new QLabel(QString::number(m_player7->getAmount()),this);
-                            connect(m_player7, SIGNAL(amountChanged(int)),m_amount7, SLOT(setNum(int)));
-                            m_amount7->setAlignment(Qt::AlignCenter);
-                            grid->addWidget(m_amount7,7,1);
-                            if(m_numberOfPlayers >= 9)
-                            {
-                                m_amount8    =   new QLabel(QString::number(m_player8->getAmount()),this);
-                                connect(m_player8, SIGNAL(amountChanged(int)),m_amount8, SLOT(setNum(int)));
-                                m_amount8->setAlignment(Qt::AlignCenter);
-                                grid->addWidget(m_amount8,8,1);
-                                if(m_numberOfPlayers == 10)
-                                {
-                                    m_amount9    =   new QLabel(QString::number(m_player9->getAmount()),this);
-                                    connect(m_player9, SIGNAL(amountChanged(int)),m_amount9, SLOT(setNum(int)));
-                                    m_amount9->setAlignment(Qt::AlignCenter);
-                                    grid->addWidget(m_amount9,9,1);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    QGroupBox* groupbox = new QGroupBox(this);
-    groupbox->setLayout(grid);
-    return groupbox;
-}
-
-QTabWidget* TableWidget::makeTabWidget()
-{
-    QTabWidget *maketable = new QTabWidget(this);
-    maketable->addTab(makeCurrentGroupBox(),tr("Current Player"));
-    maketable->addTab(makeOtherGroupBox(), tr("Other"));
-    maketable->setMaximumHeight(this->parentWidget()->parentWidget()->height()/3);
-    return maketable;
+    grid->addWidget(pb_raise, 0, 0);
+    grid->addWidget(pb_fold, 0, 1);
+    grid->addWidget(pb_call, 0, 2);
+    grid->addWidget(pb_check, 0, 3);
+    options->setMaximumHeight(options->parentWidget()->parentWidget()->parentWidget()->height()/8);
+    options->setMinimumHeight(options->parentWidget()->parentWidget()->parentWidget()->height()/8);
+    options->setLayout(grid);
+    return options;
 }
 
 QGroupBox*  TableWidget::makePlayerPushButtons()

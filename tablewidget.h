@@ -71,10 +71,7 @@ private:
     QLabel      * m_currentPlayerName;
     QLabel      * m_currentPlayerAmount;
 
-
-    QTabWidget  * makeTabWidget();
-    QGroupBox   * makeCurrentGroupBox();
-    QGroupBox   * makeOtherGroupBox();
+    QGroupBox   * makeOptionsGroupBox();
 
     QGroupBox   * makePlayerPushButtons();
     QPushButton * m_pb_0;
