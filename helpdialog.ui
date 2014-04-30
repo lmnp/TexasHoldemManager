@@ -37,6 +37,18 @@
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: outset;
+font: oblique 20pt &quot;Purisa&quot;;
+background-color: rgb(31, 31, 31);
+color: rgb(200, 200, 200);
+border-width: 5px;
+border-radius: 20px;
+border-top-color: rgb(34, 215, 255);
+border-left-color: rgb(34, 215, 255);
+border-right-color: rgb(255, 148, 25);
+border-bottom-color: rgb(255, 148, 25);</string>
+     </property>
      <property name="text">
       <string>Back</string>
      </property>

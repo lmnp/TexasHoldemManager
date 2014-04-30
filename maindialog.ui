@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainDialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(59, 59, 59);</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QPushButton" name="pb_play">
@@ -24,15 +27,27 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>250</width>
-       <height>100</height>
+       <width>500</width>
+       <height>200</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>250</width>
-       <height>100</height>
+       <width>500</width>
+       <height>200</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: outset;
+font: oblique 20pt &quot;Purisa&quot;;
+background-color: rgb(31, 31, 31);
+color: rgb(200, 200, 200);
+border-width: 5px;
+border-radius: 20px;
+border-top-color: rgb(34, 215, 255);
+border-left-color: rgb(34, 215, 255);
+border-right-color: rgb(255, 148, 25);
+border-bottom-color: rgb(255, 148, 25);</string>
      </property>
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
@@ -52,15 +67,27 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>250</width>
-       <height>100</height>
+       <width>500</width>
+       <height>200</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>250</width>
-       <height>100</height>
+       <width>500</width>
+       <height>200</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: outset;
+font: oblique 20pt &quot;Purisa&quot;;
+background-color: rgb(31, 31, 31);
+color: rgb(200, 200, 200);
+border-width: 5px;
+border-radius: 20px;
+border-top-color: rgb(34, 215, 255);
+border-left-color: rgb(34, 215, 255);
+border-right-color: rgb(255, 148, 25);
+border-bottom-color: rgb(255, 148, 25);</string>
      </property>
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
@@ -80,15 +107,27 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>250</width>
-       <height>100</height>
+       <width>500</width>
+       <height>200</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>250</width>
-       <height>100</height>
+       <width>500</width>
+       <height>200</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: outset;
+font: oblique 20pt &quot;Purisa&quot;;
+background-color: rgb(31, 31, 31);
+color: rgb(200, 200, 200);
+border-width: 5px;
+border-radius: 20px;
+border-top-color: rgb(34, 215, 255);
+border-left-color: rgb(34, 215, 255);
+border-right-color: rgb(255, 148, 25);
+border-bottom-color: rgb(255, 148, 25);</string>
      </property>
      <property name="locale">
       <locale language="English" country="UnitedStates"/>

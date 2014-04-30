@@ -13,6 +13,7 @@ PreGameOneDialog::PreGameOneDialog(QWidget *parent) :
     QValidator *blinds  = new QIntValidator(15, 100, this);
     ui->le_players->setValidator(players);
     ui->le_blinds->setValidator(blinds);
+    ui->horizontalLayout->setAlignment(Qt::AlignCenter);
 }
 
 PreGameOneDialog::~PreGameOneDialog()

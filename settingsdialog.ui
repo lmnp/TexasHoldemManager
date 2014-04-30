@@ -13,11 +13,19 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="l_language">
+       <property name="styleSheet">
+        <string notr="true">
+font: oblique 20pt &quot;Purisa&quot;;
+color: rgb(200, 200, 200);</string>
+       </property>
        <property name="text">
         <string>Language</string>
        </property>
@@ -28,6 +36,18 @@
      </item>
      <item>
       <widget class="QComboBox" name="cb_language">
+       <property name="styleSheet">
+        <string notr="true">border-style: outset;
+font: oblique 20pt &quot;Purisa&quot;;
+background-color: rgb(31, 31, 31);
+color: rgb(200, 200, 200);
+border-width: 5px;
+border-radius: 20px;
+border-top-color: rgb(34, 215, 255);
+border-left-color: rgb(34, 215, 255);
+border-right-color: rgb(255, 148, 25);
+border-bottom-color: rgb(255, 148, 25);</string>
+       </property>
        <item>
         <property name="text">
          <string>English</string>
@@ -61,6 +81,18 @@
        <width>150</width>
        <height>100</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: outset;
+font: oblique 20pt &quot;Purisa&quot;;
+background-color: rgb(31, 31, 31);
+color: rgb(200, 200, 200);
+border-width: 5px;
+border-radius: 20px;
+border-top-color: rgb(34, 215, 255);
+border-left-color: rgb(34, 215, 255);
+border-right-color: rgb(255, 148, 25);
+border-bottom-color: rgb(255, 148, 25);</string>
      </property>
      <property name="text">
       <string>Back</string>
