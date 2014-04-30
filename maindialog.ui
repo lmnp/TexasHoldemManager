@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>480</height>
+    <height>630</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainDialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(59, 59, 59);</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -38,16 +38,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 5px;
-border-radius: 20px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+      <string notr="true"/>
      </property>
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
@@ -78,16 +69,7 @@ border-bottom-color: rgb(255, 148, 25);</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 5px;
-border-radius: 20px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+      <string notr="true"/>
      </property>
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
@@ -118,16 +100,7 @@ border-bottom-color: rgb(255, 148, 25);</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 5px;
-border-radius: 20px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+      <string notr="true"/>
      </property>
      <property name="locale">
       <locale language="English" country="UnitedStates"/>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1058</width>
-    <height>300</height>
+    <width>1250</width>
+    <height>293</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,16 +17,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="styleSheet">
-      <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 5px;
-border-radius: 20px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+      <string notr="true"/>
      </property>
      <property name="title">
       <string>Game Configuration</string>
@@ -51,16 +42,7 @@ border-bottom-color: rgb(255, 148, 25);</string>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 0px;
-border-radius: 0px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Number of Players</string>
@@ -88,16 +70,7 @@ border-bottom-color: rgb(255, 148, 25);</string>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 0px;
-border-radius: 0px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Blinds (small)</string>
@@ -129,10 +102,7 @@ border-bottom-color: rgb(255, 148, 25);</string>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">font: oblique 20pt &quot;Purisa&quot;;
-color: rgb(200, 200, 200);
-border-width:2px;
-border-radius:0px;</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>8</string>
@@ -157,10 +127,7 @@ border-radius:0px;</string>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">font: oblique 20pt &quot;Purisa&quot;;
-color: rgb(200, 200, 200);
-border-width:2px;
-border-radius:0px;</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>15</string>
@@ -203,16 +170,7 @@ border-radius:0px;</string>
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 5px;
-border-radius: 20px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Back</string>
@@ -243,16 +201,7 @@ border-bottom-color: rgb(255, 148, 25);</string>
         <enum>Qt::RightToLeft</enum>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-style: outset;
-font: oblique 20pt &quot;Purisa&quot;;
-background-color: rgb(31, 31, 31);
-color: rgb(200, 200, 200);
-border-width: 5px;
-border-radius: 20px;
-border-top-color: rgb(34, 215, 255);
-border-left-color: rgb(34, 215, 255);
-border-right-color: rgb(255, 148, 25);
-border-bottom-color: rgb(255, 148, 25);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Next</string>

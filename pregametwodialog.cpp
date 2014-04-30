@@ -92,6 +92,16 @@ void PreGameTwoDialog::on_pb_next_released()
         }
     }
     m_mainwindow = new MainWindow(this,m_sblind, m_numberOfPlayers,names, amounts);
+    m_mainwindow->setStyleSheet("QPushButton {border-style: outset;"
+                                  "font: oblique 20pt Purisa;"
+                                  "background-color: rgb(31, 31, 31);"
+                                  "color: rgb(200, 200, 200);"
+                                  "border-width: 5px;"
+                                  "border-radius: 200px;"
+                                  "border-top-color: rgb(34, 215, 255);"
+                                  "border-left-color: rgb(34, 215, 255);"
+                                  "border-right-color: rgb(255, 148, 25);"
+                                  "border-bottom-color: rgb(255, 148, 25);}");
     m_mainwindow->showMaximized();
 }
 
