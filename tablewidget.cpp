@@ -85,6 +85,16 @@ TableWidget::TableWidget(QWidget *parent, int blind, int players, QString* names
     vbox->addWidget(makePlayerPushButtons());
     vbox->addWidget(makeOptionsGroupBox());
     setLayout(vbox);
+    setStyleSheet( "QPushButton {border-style: outset;"
+            "font: oblique 20pt Purisa;"
+            "background-color: rgb(31, 31, 31);"
+            "color: rgb(200, 200, 200);"
+            "border-width: 10px;"
+            "border-radius: 40px;"
+            "border-top-color: rgb(34, 215, 255);"
+            "border-left-color: rgb(34, 215, 255);"
+            "border-right-color: rgb(255, 148, 25);"
+            "border-bottom-color: rgb(255, 148, 25);}");
 }
 
 void        TableWidget::on_pb_call_released()
